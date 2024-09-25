@@ -1,0 +1,32 @@
+package mainalimentos;
+public class Perecedero extends Articulo {
+    private int diasPorCaducar;
+
+    public Perecedero(String codigo, String nombre, double precio, int diasPorCaducar) {
+        super(codigo, nombre, precio);
+        this.diasPorCaducar = diasPorCaducar;
+    }
+
+    @Override
+    public double calcular(int cantidad) {
+        double precioFinal = precio;
+
+        if (diasPorCaducar == 3) {
+            precioFinal *= 0.8; // Descuento del 20%
+        } else if (diasPorCaducar == 2) {
+            precioFinal *= 0.6; // Descuento del 40%
+        } else if (diasPorCaducar == 1) {
+            precioFinal *= 0.4; // Descuento del 60%
+        }
+
+        return precioFinal * cantidad;
+    }
+
+    public int getDiasPorCaducar() {
+        return diasPorCaducar;
+    }
+
+    public double getPrecioNormal(int cantidad) {
+        return precio * cantidad;
+    }
+}
