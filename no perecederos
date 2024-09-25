@@ -1,0 +1,14 @@
+package mainalimentos;
+public class NoPerecedero extends Articulo {
+    private String tipo;
+
+    public NoPerecedero(String codigo, String nombre, double precio, String tipo) {
+        super(codigo, nombre, precio);
+        this.tipo = tipo;
+    }
+
+    @Override
+    public double calcular(int cantidad) {
+        return precio * cantidad;
+    }
+}
