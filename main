@@ -1,0 +1,78 @@
+package mainalimentos;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Mainalimentos {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayList<Articulo> articulos = new ArrayList<>();
+
+        articulos.add(new Perecedero("P001", "Leche", 2.50, 3));
+        articulos.add(new Perecedero("P002", "Carne", 10.00, 2));
+        articulos.add(new Perecedero("P003", "Pescado", 8.00, 1));
+
+        articulos.add(new NoPerecedero("NP001", "Arroz", 1.20, "Alimento"));
+        articulos.add(new NoPerecedero("NP002", "Azúcar", 0.80, "Alimento"));
+        articulos.add(new NoPerecedero("NP003", "Detergente", 3.50, "Limpieza"));
+
+        ArrayList<String> productosComprados = new ArrayList<>();
+        ArrayList<Double> preciosFinales = new ArrayList<>();
+
+        System.out.println("Lista de productos disponibles:");
+        for (int i = 0; i < articulos.size(); i++) {
+            Articulo articulo = articulos.get(i);
+            System.out.println((i + 1) + ". " + articulo.getNombre() + " - Precio: $" + articulo.precio);
+        }
+
+        double totalVenta = 0;
+        boolean continuar = true;
+
+        while (continuar) {
+            System.out.print("\nIngrese el número del producto que desea comprar: ");
+            int numeroProducto = scanner.nextInt();
+
+            if (numeroProducto < 1 || numeroProducto > articulos.size()) {
+                System.out.println("Producto no válido, intente de nuevo.");
+                continue;
+            }
+
+            Articulo articuloSeleccionado = articulos.get(numeroProducto - 1);
+
+            System.out.print("¿Cuántas unidades desea comprar? ");
+            int cantidad = scanner.nextInt();
+
+            double precioTotal = articuloSeleccionado.calcular(cantidad);
+
+            if (articuloSeleccionado instanceof Perecedero) {
+                Perecedero perecedero = (Perecedero) articuloSeleccionado;
+                double precioNormal = perecedero.getPrecioNormal(cantidad);
+                System.out.println("Artículo: " + perecedero.getNombre() + 
+                                   "\n- Precio Normal: $" + precioNormal + 
+                                   "\n- Precio con Descuento: $" + precioTotal + 
+                                   "\n- Días por caducar: " + perecedero.getDiasPorCaducar());
+            } else {
+                System.out.println("Artículo: " + articuloSeleccionado.getNombre() + 
+                                   "\n - Precio Total: $" + precioTotal);
+            }
+
+            productosComprados.add(articuloSeleccionado.getNombre() + " (x" + cantidad + ")");
+            preciosFinales.add(precioTotal);
+
+            totalVenta += precioTotal;
+
+            System.out.print("¿Desea comprar otro producto? (s/n): ");
+            char respuesta = scanner.next().charAt(0);
+            continuar = (respuesta == 's' || respuesta == 'S');
+        }
+
+        System.out.println("\nResumen de productos comprados:");
+        for (int i = 0; i < productosComprados.size(); i++) {
+            System.out.println(productosComprados.get(i) + " - Precio Final: $" + preciosFinales.get(i));
+        }
+
+        System.out.println("\n El total de la venta es: $" + totalVenta);
+
+        scanner.close();
+    }
+}
